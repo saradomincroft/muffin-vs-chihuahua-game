@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guess the Image</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
+  <script>
+    let timeLeft = {{ time_limit }};
+    function startCountdown() {
+      const timer = document.getElementById('timer');
+      const interval = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          document.getElementById('guessForm').submit();
+        } else {
+          timer.innerText = timeLeft + 's';
+          timeLeft--;
+        }
+      }, 1000);
+    }
+    window.onload = startCountdown;
+  </script>
+</head>
+<body class="bg-yellow-50 flex items-center justify-center min-h-screen">
+  <div class="text-center bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
+    <h1 class="text-2xl font-bold mb-4 text-pink-600">
+      ⏳ Time left: <span id="timer"></span>
+    </h1>
+
+    <img src="{{ url_for('static', filename=image_path) }}"
+         class="w-full rounded-xl mb-6 shadow-md"
+         alt="Muffin or Chihuahua?" />
+
+         <form id="guessForm" action="/game" method="POST" class="space-y-4">
+            <input type="hidden" name="ai_guess" value="{{ ai_guess }}">
+            <input type="hidden" name="true_label" value="{{ true_label }}">
+            <input type="hidden" name="image_path" value="{{ image_path }}">
+        
+            <button type="submit" name="user_guess" value="muffin"
+              style="padding: 15px; background-color: #FF69B4; color: white; width: 100%; border-radius: 10px;">
+              🧁 Muffin
+            </button>
+        
+            <button type="submit" name="user_guess" value="chihuahua"
+              style="padding: 15px; background-color: purple; color: white; width: 100%; border-radius: 10px;">
+              🐶 Chihuahua
+            </button>
+        </form>
+  </div>
+</body>
+</html>
