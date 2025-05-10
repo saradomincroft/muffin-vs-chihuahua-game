@@ -4,49 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Guess the Image</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
   <script>
     let timeLeft = {{ time_limit }};
-    function startCountdown() {
-      const timer = document.getElementById('timer');
-      const interval = setInterval(() => {
+    let timer;
+    const resetGame = () => {
+      timeLeft = {{ time_limit }};
+      document.getElementById('timer').innerText = timeLeft + 's';
+
+      clearInterval(timer);
+      timer = setInterval(() => {
         if (timeLeft <= 0) {
-          clearInterval(interval);
+          clearInterval(timer);
+          const timeoutInput = document.createElement('input');
+          timeoutInput.type = 'hidden';
+          timeoutInput.name = 'user_guess';
+          timeoutInput.value = 'timeout';
+          document.getElementById('guessForm').appendChild(timeoutInput);
           document.getElementById('guessForm').submit();
         } else {
-          timer.innerText = timeLeft + 's';
+          document.getElementById('timer').innerText = timeLeft + 's';
           timeLeft--;
         }
       }, 1000);
-    }
-    window.onload = startCountdown;
+    };
+
+    window.onload = resetGame;
   </script>
+  <style>
+    button {
+      outline: none;
+      border: none;
+      padding: 15px;
+      margin: 0 0 10px 0;
+      border-radius: 10px;
+      font-size: 1rem;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .muffin-btn {
+      background-color: #FF69B4;
+      color: white;
+    }
+
+    .chihuahua-btn {
+      background-color: purple;
+      color: white;
+    }
+
+    .form-container {
+      padding: 20px;
+    }
+  </style>
 </head>
-<body class="bg-yellow-50 flex items-center justify-center min-h-screen">
-  <div class="text-center bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
-    <h1 class="text-2xl font-bold mb-4 text-pink-600">
-      ⏳ Time left: <span id="timer"></span>
-    </h1>
+<body style="background-color: #FEF3C7; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+  <div style="text-align: center; background-color: white; border-radius: 1rem; max-width: 400px; width: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+    <h1 style="font-size: 1.5rem; font-weight: bold; color: #EC4899;">⏳ Time left: <span id="timer"></span></h1>
+    <p style="margin-bottom: 1rem; color: #374151;">You: {{ user_score }} | AI: {{ ai_score }}</p>
 
-    <img src="{{ url_for('static', filename=image_path) }}"
-         class="w-full rounded-xl mb-6 shadow-md"
-         alt="Muffin or Chihuahua?" />
+    <img src="{{ url_for('static', filename=image_path) }}" style="width: 320px; aspect-ratio: 1/1; object-fit: cover; border-radius: 0.75rem; margin-bottom: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" alt="Muffin or Chihuahua?" />
 
-         <form id="guessForm" action="/game" method="POST" class="space-y-4">
-            <input type="hidden" name="ai_guess" value="{{ ai_guess }}">
-            <input type="hidden" name="true_label" value="{{ true_label }}">
-            <input type="hidden" name="image_path" value="{{ image_path }}">
-        
-            <button type="submit" name="user_guess" value="muffin"
-              style="padding: 15px; background-color: #FF69B4; color: white; width: 100%; border-radius: 10px;">
-              🧁 Muffin
-            </button>
-        
-            <button type="submit" name="user_guess" value="chihuahua"
-              style="padding: 15px; background-color: purple; color: white; width: 100%; border-radius: 10px;">
-              🐶 Chihuahua
-            </button>
-        </form>
+    <div class="form-container">
+      <form id="guessForm" action="/game" method="POST">
+        <button type="submit" name="user_guess" value="muffin" class="muffin-btn">🧁 Muffin</button>
+        <button type="submit" name="user_guess" value="chihuahua" class="chihuahua-btn">🐶 Chihuahua</button>
+      </form>
+    </div>
   </div>
 </body>
 </html>

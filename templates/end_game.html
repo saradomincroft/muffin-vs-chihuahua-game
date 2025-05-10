@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Over</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
+</head>
+<body class="bg-yellow-50 flex items-center justify-center min-h-screen">
+  <div class="text-center bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
+    <h1 class="text-3xl font-bold mb-4 text-pink-600">🎉 Game Over!</h1>
+    
+    <p class="text-lg mb-4 text-gray-700">
+      Final Score: <strong>You {{ user_score }}</strong> vs <strong>AI {{ ai_score }}</strong>
+    </p>
+
+    {% if user_score > ai_score %}
+      <p class="text-xl font-semibold text-green-600 mb-6">🎊 You Win!</p>
+    {% elif user_score < ai_score %}
+      <p class="text-xl font-semibold text-red-600 mb-6">😢 You Lose!</p>
+    {% else %}
+      <p class="text-xl font-semibold text-gray-600 mb-6">🤝 It's a Draw!</p>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}"
+       class="inline-block bg-pink-500 text-white px-6 py-3 rounded-lg hover:bg-pink-600 transition">
+      🔁 Play Again
+    </a>
+  </div>
+</body>
+</html>
