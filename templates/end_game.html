@@ -5,6 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Game Over</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
+  <style>
+    .restart-button {
+      display: inline-block;
+      background-color: #ec4899;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .restart-button:hover {
+      background-color: #db2777;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+  </style>
 </head>
 <body class="bg-yellow-50 flex items-center justify-center min-h-screen">
   <div class="text-center bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
@@ -22,8 +41,7 @@
       <p class="text-xl font-semibold text-gray-600 mb-6">🤝 It's a Draw!</p>
     {% endif %}
 
-    <a href="{{ url_for('index') }}"
-       class="inline-block bg-pink-500 text-white px-6 py-3 rounded-lg hover:bg-pink-600 transition">
+    <a href="{{ url_for('index') }}" class="restart-button">
       🔁 Play Again
     </a>
   </div>
